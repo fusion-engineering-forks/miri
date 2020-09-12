@@ -48,21 +48,15 @@ fn cargo_env() {
     env!("CARGO_BIN_EXE_cargo-miri-test"); // Asserts that this exists.
 }
 
-// FIXME: Remove this `cfg` once we fix https://github.com/rust-lang/miri/issues/1059.
-// We cfg-gate the `should_panic` attribute and the `panic!` itself, so that the test
-// stdout does not depend on the target.
 #[test]
-#[cfg_attr(not(windows), should_panic(expected="Explicit panic"))]
+#[should_panic(expected="Explicit panic")]
 fn do_panic() { // In large, friendly letters :)
-    #[cfg(not(windows))]
     panic!("Explicit panic from test!");
 }
 
-// FIXME: see above
 #[test]
+#[should_panic(expected="the len is 0 but the index is 42")]
 #[allow(unconditional_panic)]
-#[cfg_attr(not(windows), should_panic(expected="the len is 0 but the index is 42"))]
 fn fail_index_check() {
-    #[cfg(not(windows))]
     [][42]
 }
